@@ -1,0 +1,3437 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Sweet Bakery - Toko Kue Terbaik</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Sweet Bakery">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#ff6b6b">
+    
+    <!-- iOS Safari specific -->
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-touch-fullscreen" content="yes">
+    
+    <!-- Favicon and App Icons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='80'>🧁</text></svg>">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='80'>🧁</text></svg>">
+    
+    <!-- Fonts and Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+
+        /* Allow text selection for inputs and content */
+        input, textarea, .menu-item p, .about-text, .contact-form, .review-text {
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
+        }
+
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Header & Navigation */
+        header {
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            /* iOS Safari safe area */
+            padding-top: calc(1rem + env(safe-area-inset-top));
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            touch-action: manipulation;
+        }
+
+        .nav-links a:hover, .nav-links a:active {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+
+        .cart-icon {
+            position: relative;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.75rem;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            touch-action: manipulation;
+            min-width: 44px;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cart-icon:hover, .cart-icon:active {
+            background: rgba(255,255,255,0.2);
+            transform: scale(1.1);
+        }
+
+        .cart-count {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: #ff4757;
+            color: white;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: bold;
+            border: 2px solid white;
+        }
+
+        .mobile-menu {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.75rem;
+            border-radius: 8px;
+            min-width: 44px;
+            min-height: 44px;
+            touch-action: manipulation;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
+                        url('https://images.unsplash.com/photo-1486427944299-d1955d23e34d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+            height: calc(100vh - env(safe-area-inset-top));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+
+        .hero-content h1 {
+            font-size: clamp(2rem, 8vw, 3.5rem);
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease;
+            font-weight: 700;
+        }
+
+        .hero-content p {
+            font-size: clamp(1rem, 4vw, 1.3rem);
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease 0.2s both;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            color: white;
+            padding: 1.2rem 2.5rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            animation: fadeInUp 1s ease 0.4s both;
+            font-weight: 600;
+            min-height: 48px;
+            touch-action: manipulation;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .cta-button:hover, .cta-button:active {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        /* Sections */
+        .section {
+            padding: 4rem 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: clamp(2rem, 6vw, 2.5rem);
+            margin-bottom: 3rem;
+            color: #333;
+            font-weight: 700;
+        }
+
+        /* About Section */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .about-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .about-text h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #ff6b6b;
+            font-weight: 600;
+        }
+
+        .about-text ul {
+            margin-top: 1.5rem;
+            list-style: none;
+        }
+
+        .about-text li {
+            padding: 0.5rem 0;
+            font-weight: 500;
+        }
+
+        .about-image {
+            width: 100%;
+            height: 300px;
+            background: url('https://images.unsplash.com/photo-1517433670267-08bbd4be890f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        /* Menu Section */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .menu-item {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            touch-action: manipulation;
+        }
+
+        .menu-item:active {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        .menu-item-image {
+            width: 100%;
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
+        }
+
+        .menu-item-content {
+            padding: 1.5rem;
+        }
+
+        .menu-item h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .menu-item p {
+            color: #666;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #ff6b6b;
+            margin-bottom: 1rem;
+        }
+
+        .add-to-cart-btn {
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            color: white;
+            border: none;
+            padding: 1rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+            min-height: 48px;
+            font-size: 0.95rem;
+            touch-action: manipulation;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .add-to-cart-btn:active {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        /* Reviews Section */
+        .reviews-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .reviews-list {
+            background: #f8f9fa;
+            border-radius: 20px;
+            padding: 2rem;
+        }
+
+        .review-item {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+
+        .review-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+
+        .review-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .reviewer-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .reviewer-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .reviewer-name {
+            font-weight: 600;
+            color: #333;
+            font-size: 1.1rem;
+        }
+
+        .review-date {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .star-rating {
+            display: flex;
+            gap: 0.25rem;
+        }
+
+        .star {
+            font-size: 1.2rem;
+            color: #ddd;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .star.active,
+        .star.filled {
+            color: #ffd700;
+        }
+
+        .star:hover {
+            color: #ffd700;
+        }
+
+        .review-text {
+            color: #555;
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+
+        .review-form {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .review-form h3 {
+            margin-bottom: 1.5rem;
+            color: #ff6b6b;
+            font-weight: 600;
+        }
+
+        .rating-input {
+            margin-bottom: 1.5rem;
+        }
+
+        .rating-input label {
+            display: block;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .star-rating-input {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .star-rating-input .star {
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .star-rating-input .star:hover {
+            transform: scale(1.2);
+        }
+
+        .no-reviews {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #666;
+            font-style: italic;
+        }
+
+        .no-reviews i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+            color: #ff6b6b;
+        }
+
+        .reviews-stats {
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .avg-rating {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .total-reviews {
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        .submit-review-btn {
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            min-height: 48px;
+            touch-action: manipulation;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .submit-review-btn:hover, .submit-review-btn:active {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        /* Cart Sidebar */
+        .cart-sidebar {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            max-width: 400px;
+            height: 100vh;
+            height: calc(100vh + env(safe-area-inset-top));
+            background: white;
+            box-shadow: -5px 0 25px rgba(0,0,0,0.2);
+            transition: right 0.3s ease;
+            z-index: 1001;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .cart-sidebar.active {
+            right: 0;
+        }
+
+        .cart-header {
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            color: white;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            /* iOS safe area */
+            padding-top: calc(1.5rem + env(safe-area-inset-top));
+        }
+
+        .close-cart {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            min-width: 44px;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            touch-action: manipulation;
+        }
+
+        .cart-items {
+            padding: 1rem;
+            min-height: calc(100vh - 200px);
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item-info h4 {
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .cart-item-info p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .quantity-btn {
+            background: #f8f9fa;
+            border: 2px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.1rem;
+            touch-action: manipulation;
+            transition: all 0.2s ease;
+        }
+
+        .quantity-btn:active {
+            background: #e9ecef;
+            transform: scale(0.95);
+        }
+
+        .remove-item {
+            color: #ff4757;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.3rem;
+            padding: 0.5rem;
+            border-radius: 50%;
+            min-width: 40px;
+            min-height: 40px;
+            touch-action: manipulation;
+        }
+
+        .cart-footer {
+            padding: 1.5rem;
+            border-top: 1px solid #eee;
+            background: #f8f9fa;
+            position: sticky;
+            bottom: 0;
+            /* iOS safe area */
+            padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
+        }
+
+        .cart-total {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .checkout-btn {
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            color: white;
+            border: none;
+            padding: 1.2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            width: 100%;
+            font-size: 1.1rem;
+            min-height: 50px;
+            touch-action: manipulation;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .checkout-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 1002;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 1.5rem;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            min-width: 44px;
+            min-height: 44px;
+            touch-action: manipulation;
+        }
+
+        .order-summary {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 1.5rem;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+        }
+
+        .order-total {
+            font-weight: 700;
+            font-size: 1.2rem;
+            border-top: 2px solid #ddd;
+            padding-top: 0.75rem;
+            margin-top: 0.75rem;
+        }
+
+        /* Contact Section */
+        .contact-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        .contact-info {
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            padding: 2rem;
+            border-radius: 20px;
+            color: white;
+        }
+
+        .contact-info h3 {
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .contact-info p {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.95rem;
+        }
+
+        .contact-form {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            background: white;
+            min-height: 48px;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #ff6b6b;
+            box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+        }
+
+        /* Footer */
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            /* iOS safe area */
+            padding-bottom: calc(2rem + env(safe-area-inset-bottom));
+        }
+
+        .social-links {
+            margin: 1.5rem 0;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            color: white;
+            font-size: 1.5rem;
+            padding: 0.75rem;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            min-width: 50px;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            touch-action: manipulation;
+        }
+
+        .social-links a:hover, .social-links a:active {
+            color: #feca57;
+            background: rgba(254, 202, 87, 0.1);
+        }
+
+        /* Floating WhatsApp Button */
+        .whatsapp-float {
+            position: fixed;
+            bottom: calc(20px + env(safe-area-inset-bottom));
+            right: 20px;
+            background: #25d366;
+            color: white;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+            z-index: 999;
+            animation: pulse 2s infinite;
+            touch-action: manipulation;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Loading state */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ffffff30;
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Empty cart message */
+        .empty-cart {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #666;
+        }
+
+        .empty-cart i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            top: calc(80px + env(safe-area-inset-top));
+            right: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1003;
+            font-weight: 500;
+            transform: translateY(-100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: linear-gradient(135deg, #ff6b6b, #feca57);
+                flex-direction: column;
+                padding: 1rem 0;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links a {
+                margin: 0.5rem 1rem;
+                padding: 1rem;
+                text-align: center;
+            }
+
+            .mobile-menu {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .hero {
+                height: calc(100vh - 80px);
+                padding: 1rem;
+            }
+
+            .section {
+                padding: 3rem 1rem;
+            }
+
+            .modal-content {
+                padding: 1rem;
+                margin: 1rem;
+                max-height: calc(100vh - 2rem);
+            }
+
+            .reviews-container {
+                gap: 1.5rem;
+            }
+
+            .review-form {
+                padding: 1.5rem;
+            }
+
+            .star-rating-input .star {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .about-content {
+                grid-template-columns: 1fr 1fr;
+                gap: 3rem;
+            }
+
+            .about-image {
+                height: 400px;
+            }
+
+            .contact-content {
+                grid-template-columns: 1fr 1fr;
+                gap: 3rem;
+            }
+
+            .menu-grid {
+                grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+                gap: 2rem;
+            }
+
+            .menu-item-image {
+                height: 250px;
+            }
+
+            .cart-sidebar {
+                width: 400px;
+                right: -400px;
+            }
+
+            .reviews-container {
+                grid-template-columns: 2fr 1fr;
+                gap: 3rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .hero-content {
+                max-width: 800px;
+                margin: 0 auto;
+            }
+
+            .menu-item:hover {
+                transform: translateY(-10px);
+            }
+
+            .cart-icon:hover {
+                color: #333;
+                transform: scale(1.1);
+            }
+
+            .add-to-cart-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+            }
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Prevent zoom on input focus (iOS) */
+        @media screen and (-webkit-min-device-pixel-ratio: 0) {
+            select, textarea, input[type="text"], input[type="password"],
+            input[type="datetime"], input[type="datetime-local"],
+            input[type="date"], input[type="month"], input[type="time"],
+            input[type="week"], input[type="number"], input[type="email"],
+            input[type="url"], input[type="search"], input[type="tel"],
+            input[type="color"] {
+                font-size: 16px !important;
+            }
+        }
+
+        /* Hide scrollbar but keep functionality */
+        .cart-sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .cart-sidebar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .cart-sidebar::-webkit-scrollbar-thumb {
+            background: rgba(0,0,0,0.2);
+            border-radius: 2px;
+        }
+		/* Order Tracking Styles */
+.tracking-section {
+    background: #f8f9fa;
+    border-radius: 20px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.tracking-input {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.tracking-input input {
+    flex: 1;
+    padding: 1rem;
+    border: 2px solid #ddd;
+    border-radius: 12px;
+    font-size: 1rem;
+    min-width: 200px;
+}
+
+.tracking-input button {
+    background: linear-gradient(135deg, #ff6b6b, #feca57);
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    min-height: 50px;
+}
+
+.order-history {
+    margin-top: 2rem;
+}
+
+.order-history h4 {
+    color: #ff6b6b;
+    margin-bottom: 1rem;
+}
+
+.order-card {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    border-left: 4px solid;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.order-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+}
+
+.order-card.pending { border-left-color: #ffa726; }
+.order-card.confirmed { border-left-color: #42a5f5; }
+.order-card.preparing { border-left-color: #ab47bc; }
+.order-card.baking { border-left-color: #ff7043; }
+.order-card.ready { border-left-color: #26a69a; }
+.order-card.shipping { border-left-color: #66bb6a; }
+.order-card.delivered { border-left-color: #4caf50; }
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.order-id {
+    font-weight: 700;
+    color: #333;
+}
+
+.order-status {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-pending { background: #fff3e0; color: #f57c00; }
+.status-confirmed { background: #e3f2fd; color: #1976d2; }
+.status-preparing { background: #f3e5f5; color: #7b1fa2; }
+.status-baking { background: #fce4ec; color: #c2185b; }
+.status-ready { background: #e0f2f1; color: #00695c; }
+.status-shipping { background: #e8f5e8; color: #2e7d32; }
+.status-delivered { background: #e8f5e8; color: #2e7d32; }
+
+.order-items {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.order-date {
+    color: #888;
+    font-size: 0.85rem;
+}
+
+/* Tracking Modal */
+.tracking-modal .modal-content {
+    max-width: 600px;
+}
+
+.tracking-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.tracking-header h3 {
+    color: #ff6b6b;
+    margin-bottom: 0.5rem;
+}
+
+.current-status {
+    background: linear-gradient(135deg, #ff6b6b, #feca57);
+    color: white;
+    padding: 1rem;
+    border-radius: 15px;
+    text-align: center;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.current-status::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    animation: shimmer 2s infinite;
+}
+
+.current-status h4 {
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+}
+
+.estimated-time {
+    opacity: 0.9;
+    font-size: 0.9rem;
+}
+
+.tracking-timeline {
+    position: relative;
+    padding: 1rem 0;
+}
+
+.timeline-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+.timeline-item:last-child {
+    margin-bottom: 0;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: 22px;
+    top: 45px;
+    width: 2px;
+    height: calc(100% + 10px);
+    background: #e0e0e0;
+}
+
+.timeline-item:last-child::before {
+    display: none;
+}
+
+.timeline-item.completed::before {
+    background: #4caf50;
+}
+
+.timeline-item.active::before {
+    background: linear-gradient(to bottom, #4caf50, #e0e0e0);
+}
+
+.timeline-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    margin-right: 1rem;
+    position: relative;
+    z-index: 2;
+}
+
+.timeline-item.completed .timeline-icon {
+    background: #4caf50;
+    color: white;
+}
+
+.timeline-item.active .timeline-icon {
+    background: linear-gradient(135deg, #ff6b6b, #feca57);
+    color: white;
+    animation: pulse-timeline 2s infinite;
+}
+
+@keyframes pulse-timeline {
+    0% { 
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.7); 
+    }
+    70% { 
+        transform: scale(1.05);
+        box-shadow: 0 0 0 10px rgba(255, 107, 107, 0); 
+    }
+    100% { 
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(255, 107, 107, 0); 
+    }
+}
+
+.timeline-content {
+    flex: 1;
+}
+
+.timeline-title {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.25rem;
+}
+
+.timeline-desc {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+}
+
+.timeline-time {
+    color: #888;
+    font-size: 0.8rem;
+}
+
+/* Progress Bar */
+.progress-container {
+    background: #f0f0f0;
+    border-radius: 10px;
+    height: 8px;
+    margin: 1rem 0;
+    overflow: hidden;
+}
+
+.progress-bar {
+    background: linear-gradient(135deg, #ff6b6b, #feca57);
+    height: 100%;
+    border-radius: 10px;
+    transition: width 1s ease;
+    position: relative;
+}
+
+.progress-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* Delivery Info */
+.delivery-info {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 15px;
+    margin-top: 2rem;
+}
+
+.delivery-info h4 {
+    color: #ff6b6b;
+    margin-bottom: 1rem;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.info-row strong {
+    color: #333;
+}
+
+/* Courier Info */
+.courier-info {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 15px;
+    margin-top: 1rem;
+    border: 2px solid #e3f2fd;
+}
+
+.courier-info h5 {
+    color: #1976d2;
+    margin-bottom: 0.5rem;
+}
+
+.courier-contact {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.courier-contact button {
+    background: #25d366;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Status Update Badge */
+.status-update-badge {
+    position: fixed;
+    top: calc(100px + env(safe-area-inset-top));
+    right: 20px;
+    background: #4caf50;
+    color: white;
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+    z-index: 1003;
+    transform: translateX(300px);
+    transition: transform 0.5s ease;
+}
+
+.status-update-badge.show {
+    transform: translateX(0);
+}
+
+.no-orders {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #666;
+}
+
+.no-orders i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+    color: #ff6b6b;
+}
+
+/* Track Order Button in Nav */
+.track-order-btn {
+    background: rgba(255,255,255,0.2);
+    color: white;
+    border: none;
+    padding: 0.75rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    touch-action: manipulation;
+    margin-right: 1rem;
+}
+
+.track-order-btn:hover {
+    background: rgba(255,255,255,0.3);
+    transform: translateY(-2px);
+}
+/* Chatbot Styles */
+.chatbot-widget {
+    position: fixed;
+    bottom: calc(90px + env(safe-area-inset-bottom));
+    right: 20px;
+    z-index: 1004;
+}
+
+.chatbot-toggle {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+    transition: all 0.3s ease;
+    animation: chatbot-pulse 3s infinite;
+}
+
+.chatbot-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 30px rgba(102, 126, 234, 0.6);
+}
+
+.chatbot-toggle.active {
+    background: linear-gradient(135deg, #ff6b6b, #feca57);
+    animation: none;
+}
+
+@keyframes chatbot-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.chatbot-window {
+    position: fixed;
+    bottom: calc(160px + env(safe-area-inset-bottom));
+    right: 20px;
+    width: 350px;
+    height: 500px;
+    max-width: calc(100vw - 40px);
+    max-height: calc(100vh - 200px);
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    transform: scale(0) translateY(100px);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 1005;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.chatbot-window.active {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+}
+
+.chatbot-header {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chatbot-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+}
+
+.chatbot-status {
+    width: 8px;
+    height: 8px;
+    background: #4caf50;
+    border-radius: 50%;
+    animation: chatbot-online 2s infinite;
+}
+
+@keyframes chatbot-online {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0.3; }
+}
+
+.chatbot-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 50%;
+    min-width: 30px;
+    min-height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chatbot-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background: #f8f9fa;
+}
+
+.chatbot-messages::-webkit-scrollbar {
+    width: 4px;
+}
+
+.chatbot-messages::-webkit-scrollbar-thumb {
+    background: rgba(102, 126, 234, 0.3);
+    border-radius: 2px;
+}
+
+.chat-message {
+    display: flex;
+    gap: 0.75rem;
+    animation: fadeInUp 0.3s ease;
+}
+
+.chat-message.user {
+    flex-direction: row-reverse;
+}
+
+.chat-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.chat-avatar.bot {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+}
+
+.chat-avatar.user {
+    background: linear-gradient(135deg, #ff6b6b, #feca57);
+    color: white;
+}
+
+.chat-bubble {
+    max-width: 80%;
+    padding: 0.75rem 1rem;
+    border-radius: 18px;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    word-wrap: break-word;
+}
+
+.chat-bubble.bot {
+    background: white;
+    color: #333;
+    border-bottom-left-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.chat-bubble.user {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border-bottom-right-radius: 6px;
+    margin-left: auto;
+}
+
+.chat-typing {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: white;
+    border-radius: 18px;
+    border-bottom-left-radius: 6px;
+    max-width: fit-content;
+}
+
+.typing-dots {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.typing-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #667eea;
+    animation: typing-bounce 1.5s infinite;
+}
+
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typing-bounce {
+    0%, 60%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-8px); }
+}
+
+.quick-replies {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    animation: fadeInUp 0.3s ease 0.5s both;
+}
+
+.quick-reply {
+    background: white;
+    border: 2px solid #667eea;
+    color: #667eea;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.quick-reply:hover, .quick-reply:active {
+    background: #667eea;
+    color: white;
+    transform: translateY(-1px);
+}
+
+.menu-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    margin-top: 0.5rem;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.menu-card:hover {
+    transform: translateY(-2px);
+}
+
+.menu-card-image {
+    width: 100%;
+    height: 100px;
+    background-size: cover;
+    background-position: center;
+}
+
+.menu-card-content {
+    padding: 1rem;
+}
+
+.menu-card-title {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: #333;
+    font-size: 0.9rem;
+}
+
+.menu-card-price {
+    color: #ff6b6b;
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.menu-grid-chat {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.chatbot-input {
+    border-top: 1px solid #eee;
+    padding: 1rem;
+    background: white;
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-end;
+}
+
+.chatbot-input-field {
+    flex: 1;
+    border: 2px solid #eee;
+    border-radius: 20px;
+    padding: 0.75rem 1rem;
+    resize: none;
+    max-height: 100px;
+    min-height: 40px;
+    font-family: inherit;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.chatbot-input-field:focus {
+    border-color: #667eea;
+}
+
+.chatbot-send {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 1rem;
+}
+
+.chatbot-send:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.chatbot-send:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Order Summary in Chat */
+.order-summary-chat {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-top: 0.5rem;
+    border: 2px solid #e9ecef;
+}
+
+.order-summary-header {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.order-item-chat {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #e9ecef;
+    font-size: 0.85rem;
+}
+
+.order-item-chat:last-child {
+    border-bottom: none;
+    font-weight: 600;
+    color: #ff6b6b;
+    margin-top: 0.5rem;
+}
+
+.chat-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.chat-action-btn {
+    flex: 1;
+    background: linear-gradient(135deg, #ff6b6b, #feca57);
+    color: white;
+    border: none;
+    padding: 0.75rem;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.chat-action-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+}
+
+.chat-action-btn.secondary {
+    background: white;
+    color: #667eea;
+    border: 2px solid #667eea;
+}
+
+.chat-action-btn.secondary:hover {
+    background: #667eea;
+    color: white;
+}
+
+/* Mobile Responsiveness for Chatbot */
+@media (max-width: 768px) {
+    .chatbot-window {
+        width: calc(100vw - 20px);
+        height: calc(100vh - 100px);
+        bottom: 10px;
+        right: 10px;
+        border-radius: 0;
+        max-height: none;
+    }
+
+    .chatbot-window.active {
+        border-radius: 20px 20px 0 0;
+    }
+
+    .menu-grid-chat {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Notification badge for chatbot */
+.chatbot-notification {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #ff4757;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: bold;
+    animation: chatbot-notify 2s infinite;
+}
+
+@keyframes chatbot-notify {
+    0%, 50% { transform: scale(1); }
+    25% { transform: scale(1.2); }
+}
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <a href="#home" class="logo">
+                <span>🧁</span>
+                <span>Sweet Bakery</span>
+            </a>
+            <ul class="nav-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#about">Tentang</a></li>
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#tracking">Tracking</a></li>
+    <li><a href="#reviews">Ulasan</a></li>
+    <li><a href="#contact">Kontak</a></li>
+</ul>
+<div class="nav-actions">
+    <button class="track-order-btn" onclick="showTrackingModal()">
+        <i class="fas fa-map-marker-alt"></i> Lacak Pesanan
+    </button>
+    <div class="cart-icon" onclick="toggleCart()" role="button" aria-label="Buka keranjang belanja">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="cart-count" id="cart-count">0</span>
+    </div>
+</div>
+            <button class="mobile-menu" onclick="toggleMobileMenu()" aria-label="Menu navigasi">☰</button>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Selamat Datang di Sweet Bakery</h1>
+            <p>Kue terbaik dibuat dengan cinta untuk kebahagiaan Anda</p>
+            <a href="#menu" class="cta-button">Lihat Menu Kami</a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section">
+        <h2 class="section-title">Tentang Kami</h2>
+        <div class="about-content">
+            <div class="about-text">
+                <h3>Sweet Bakery</h3>
+                <p>Sweet Bakery telah melayani pelanggan sejak tahun 2021, dengan kue-kue berkualitas yang dibuat dari bahan terbaik dan resep andalan. Setiap kue dibuat dengan sepenuh hati untuk menghadirkan kebahagiaan di setiap gigitan.</p>
+                <ul style="margin-top: 1rem; list-style-position: inside;">
+                    <li>🧁 Bahan berkualitas premium</li>
+                    <li>🧁 Resep tradisional</li>
+                    <li>🧁 Dibuat fresh setiap hari</li>
+                    <li>🧁 Custom order tersedia</li>
+                </ul>
+            </div>
+            <div class="about-image" style="background-image: url('galerii.jpg')"></div>
+        </div>
+    </section>
+<!-- Order Tracking Section -->
+<section id="tracking" class="section">
+    <h2 class="section-title">Lacak Pesanan Anda</h2>
+    <div class="tracking-section">
+        <div class="tracking-input">
+            <input type="text" id="order-tracking-input" placeholder="Masukkan nomor pesanan (contoh: SB123456) atau nomor telepon">
+            <button onclick="trackOrder()">
+                <i class="fas fa-search"></i> Lacak Pesanan
+            </button>
+        </div>
+        
+        <div class="order-history" id="order-history">
+            <h4><i class="fas fa-history"></i> Riwayat Pesanan Saya</h4>
+            <div id="orders-list">
+                <div class="no-orders">
+                    <i class="fas fa-receipt"></i>
+                    <p>Belum ada pesanan. Silakan berbelanja terlebih dahulu!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+    <!-- Menu Section -->
+    <section id="menu" class="section">
+        <h2 class="section-title">Menu Kami</h2>
+        <div class="menu-grid">
+            <div class="menu-item">
+                <div class="menu-item-image" style="background-image: url('tart.jpg')"></div>
+                <div class="menu-item-content">
+                    <h3>Kue Tart Coklat</h3>
+                    <p>Kue cokelat klasik dengan lapisan ganache lembut yang kaya rasa, cocok untuk perayaan spesial</p>
+                    <div class="price">Rp 250.000</div>
+                    <button class="add-to-cart-btn" onclick="addToCart('Kue Tart Coklat', 250000)">
+                        <i class="fas fa-shopping-cart"></i> Tambah ke Keranjang
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-item-image" style="background-image: url('velvet.jpg')"></div>
+                <div class="menu-item-content">
+                    <h3>Red Velvet Cake</h3>
+                    <p>Kue berwarna merah ikonik dengan tekstur lembut, dipadukan dengan cream cheese frosting yang gurih dan manis</p>
+                    <div class="price">Rp 280.000</div>
+                    <button class="add-to-cart-btn" onclick="addToCart('Red Velvet Cake', 280000)">
+                        <i class="fas fa-shopping-cart"></i> Tambah ke Keranjang
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-item-image" style="background-image: url('cake.jpg')"></div>
+                <div class="menu-item-content">
+                    <h3>Cheesecake</h3>
+                    <p>Cheesecake lembut ala New York dengan dasar biskuit renyah dan topping buah beri segar</p>
+                    <div class="price">Rp 180.000</div>
+                    <button class="add-to-cart-btn" onclick="addToCart('Cheesecake', 180000)">
+                        <i class="fas fa-shopping-cart"></i> Tambah ke Keranjang
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-item-image" style="background-image: url('strawberry.jpg')"></div>
+                <div class="menu-item-content">
+                    <h3>Strawberry Shortcake</h3>
+                    <p>Kue spons ringan dengan lapisan krim segar dan potongan buah stroberi asli yang memberikan sensasi segar.</p>
+                    <div class="price">Rp 220.000</div>
+                    <button class="add-to-cart-btn" onclick="addToCart('Strawberry Shortcake', 220000)">
+                        <i class="fas fa-shopping-cart"></i> Tambah ke Keranjang
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-item-image" style="background-image: url('tiramisuu.jpg')"></div>
+                <div class="menu-item-content">
+                    <h3>Tiramisu</h3>
+                    <p>Dessert khas Italia yang autentik, menggunakan perpaduan sempurna antara mascarpone dan aroma espresso</p>
+                    <div class="price">Rp 200.000</div>
+                    <button class="add-to-cart-btn" onclick="addToCart('Tiramisu', 200000)">
+                        <i class="fas fa-shopping-cart"></i> Tambah ke Keranjang
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-item-image" style="background-image: url('cupcakes.jpg')"></div>
+                <div class="menu-item-content">
+                    <h3>Cupcakes</h3>
+                    <p>Kue mungil dengan berbagai pilihan rasa dan dekorasi frosting yang cantik dan menggemaskan</p>
+                    <div class="price">Rp 25.000/pcs</div>
+                    <button class="add-to-cart-btn" onclick="addToCart('Cupcakes', 25000)">
+                        <i class="fas fa-shopping-cart"></i> Tambah ke Keranjang
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section id="reviews" class="section">
+        <h2 class="section-title">Ulasan Pelanggan</h2>
+        
+        <div class="reviews-stats" id="reviews-stats" style="display: none;">
+            <div class="avg-rating" id="avg-rating">0.0</div>
+            <div class="star-rating" id="avg-star-display"></div>
+            <div class="total-reviews" id="total-reviews-display">Berdasarkan 0 ulasan</div>
+        </div>
+
+        <div class="reviews-container">
+            <div class="reviews-list">
+                <h3 style="margin-bottom: 1.5rem; color: #ff6b6b;">Semua Ulasan</h3>
+                <div id="reviews-container">
+                    <div class="no-reviews">
+                        <i class="fas fa-comments"></i>
+                        <p>Belum ada ulasan. Jadilah yang pertama memberikan ulasan!</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="review-form">
+                <h3>Tulis Ulasan Anda</h3>
+                <form id="review-form">
+                    <div class="form-group">
+                        <label for="reviewer-name">Nama *</label>
+                        <input type="text" id="reviewer-name" name="reviewer-name" required placeholder="Masukkan nama Anda">
+                    </div>
+                    
+                    <div class="rating-input">
+                        <label>Rating *</label>
+                        <div class="star-rating-input" id="star-rating-input">
+                            <span class="star" data-rating="1">⭐</span>
+                            <span class="star" data-rating="2">⭐</span>
+                            <span class="star" data-rating="3">⭐</span>
+                            <span class="star" data-rating="4">⭐</span>
+                            <span class="star" data-rating="5">⭐</span>
+                        </div>
+                        <small style="color: #666;">Klik bintang untuk memberikan rating</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="review-text">Ulasan *</label>
+                        <textarea id="review-text" name="review-text" rows="4" required placeholder="Bagikan pengalaman Anda dengan Sweet Bakery..."></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-review-btn">
+                        <i class="fas fa-paper-plane"></i> Kirim Ulasan
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section">
+        <h2 class="section-title">Hubungi Kami</h2>
+        <div class="contact-content">
+            <div class="contact-info">
+                <h3>Informasi Kontak</h3>
+                <p><i class="fas fa-map-marker-alt"></i> Jl. Manis Raya No. 123, Jakarta</p>
+                <p><i class="fas fa-phone"></i> +62 822-2881-0026</p>
+                <p><i class="fas fa-envelope"></i> info@sweetbakery.com</p>
+                <p><i class="fas fa-clock"></i> Senin - Minggu: 07:00 - 22:00</p>
+                
+                <h3 style="margin-top: 2rem;">Jam Operasional</h3>
+                <p>Senin - Jumat: 07:00 - 22:00</p>
+                <p>Sabtu - Minggu: 08:00 - 23:00</p>
+            </div>
+            <div class="contact-form">
+                <h3>Kirim Pesan</h3>
+                <form>
+                    <div class="form-group">
+                        <label for="name">Nama</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Pesan</label>
+                        <textarea id="message" name="message" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="cta-button">Kirim Pesan</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-header">
+            <h3>Keranjang Belanja</h3>
+            <button class="close-cart" onclick="toggleCart()">×</button>
+        </div>
+        <div class="cart-items" id="cart-items">
+            <div class="empty-cart">
+                <i class="fas fa-shopping-cart"></i>
+                <p>Keranjang belanja kosong</p>
+            </div>
+        </div>
+        <div class="cart-footer" id="cart-footer" style="display: none;">
+            <div class="cart-total" id="cart-total">Total: Rp 0</div>
+            <button class="checkout-btn" onclick="showCheckoutModal()">
+                <i class="fab fa-whatsapp"></i> Checkout
+            </button>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+<div class="modal" id="checkout-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Checkout</h3>
+            <button class="close-modal" onclick="closeCheckoutModal()">×</button>
+        </div>
+        <div class="order-summary" id="order-summary"></div>
+        
+        <form id="checkout-form">
+            <h4>Informasi Pengiriman</h4>
+            <div class="form-group">
+                <label for="customer-name">Nama Lengkap *</label>
+                <input type="text" id="customer-name" name="customer-name" required placeholder="Masukkan nama lengkap">
+            </div>
+            <div class="form-group">
+                <label for="customer-phone">Nomor Telepon *</label>
+                <input type="tel" id="customer-phone" name="customer-phone" required placeholder="08xxxxxxxxxx">
+            </div>
+            <div class="form-group">
+                <label for="customer-address">Alamat Pengiriman *</label>
+                <textarea id="customer-address" name="customer-address" rows="3" required placeholder="Masukkan alamat lengkap untuk pengiriman"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="delivery-date">Tanggal Pengiriman *</label>
+                <input type="date" id="delivery-date" name="delivery-date" required>
+            </div>
+            <div class="form-group">
+                <label for="delivery-time">Waktu Pengiriman</label>
+                <select id="delivery-time" name="delivery-time">
+                    <option value="09:00-12:00">Pagi (09:00 - 12:00)</option>
+                    <option value="12:00-15:00">Siang (12:00 - 15:00)</option>
+                    <option value="15:00-18:00">Sore (15:00 - 18:00)</option>
+                    <option value="18:00-21:00">Malam (18:00 - 21:00)</option>
+                </select>
+            </div>
+
+            <h4>Metode Pembayaran</h4>
+            <div class="form-group">
+                <label for="payment-method">Pilih Metode Pembayaran *</label>
+                <select id="payment-method" name="payment-method" required>
+                    <option value="bank-transfer">Transfer Bank</option>
+                    <option value="credit-card">Kartu Kredit</option>
+                    <option value="cash-on-delivery">Bayar di Tempat</option>
+                </select>
+            </div>
+
+            <button type="submit" class="checkout-btn">
+                <i class="fas fa-check"></i> Kirim Pesanan
+            </button>
+        </form>
+    </div>
+</div>
+
+
+
+<!-- Order Tracking Modal -->
+<div class="modal tracking-modal" id="tracking-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Detail Tracking Pesanan</h3>
+            <button class="close-modal" onclick="closeTrackingModal()">×</button>
+        </div>
+        
+        <div id="tracking-content">
+            <div class="tracking-header">
+                <h3 id="tracking-order-id">Pesanan #SB001234</h3>
+                <div class="current-status">
+                    <h4 id="current-status-text">Sedang Diproses</h4>
+                    <div class="estimated-time" id="estimated-time">Estimasi: 2-3 jam lagi</div>
+                </div>
+            </div>
+
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar" style="width: 40%"></div>
+            </div>
+
+            <div class="tracking-timeline" id="tracking-timeline">
+                <!-- Timeline items akan diisi oleh JavaScript -->
+            </div>
+
+            <div class="delivery-info" id="delivery-info">
+                <h4><i class="fas fa-truck"></i> Informasi Pengiriman</h4>
+                <div class="info-row">
+                    <span>Alamat:</span>
+                    <strong id="delivery-address">-</strong>
+                </div>
+                <div class="info-row">
+                    <span>Estimasi Tiba:</span>
+                    <strong id="delivery-estimate">-</strong>
+                </div>
+                <div class="info-row">
+                    <span>Total Pembayaran:</span>
+                    <strong id="order-amount">-</strong>
+                </div>
+            </div>
+
+            <div class="courier-info" id="courier-info" style="display: none;">
+                <h5><i class="fas fa-motorcycle"></i> Informasi Kurir</h5>
+                <div class="info-row">
+                    <span>Nama Kurir:</span>
+                    <strong id="courier-name">-</strong>
+                </div>
+                <div class="info-row">
+                    <span>Nomor Kendaraan:</span>
+                    <strong id="courier-vehicle">-</strong>
+                </div>
+                <div class="courier-contact">
+                    <button onclick="contactCourier()">
+                        <i class="fab fa-whatsapp"></i> Hubungi Kurir
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="social-links">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-whatsapp"></i></a>
+        </div>
+        <p>&copy; 2024 Sweet Bakery. All rights reserved. | Dibuat dengan ❤️</p>
+    </footer>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/6282228810026?text=Halo%20Sweet%20Bakery!%20Saya%20ingin%20bertanya%20tentang%20produk%20kue%20Anda." class="whatsapp-float" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <script>
+
+	// Handle checkout form submission
+document.getElementById('checkout-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Handle checkout form submission
+document.getElementById('checkout-form').addEventListener('submit', function(e) {
+    e.preventDefault(); // Prevent default form submission
+
+    const formData = new FormData(e.target);
+    const customerName = formData.get('customer-name');
+    const customerPhone = formData.get('customer-phone');
+    const customerAddress = formData.get('customer-address');
+    const deliveryDate = formData.get('delivery-date');
+    const deliveryTime = formData.get('delivery-time');
+    const paymentMethod = formData.get('payment-method');
+
+    // Create an order summary
+    let orderSummary = `Pesanan Baru dari ${customerName}:\n`;
+    orderSummary += `Telepon: ${customerPhone}\n`;
+    orderSummary += `Alamat: ${customerAddress}\n`;
+    orderSummary += `Tanggal Pengiriman: ${deliveryDate}\n`;
+    orderSummary += `Waktu Pengiriman: ${deliveryTime}\n`;
+    orderSummary += `Metode Pembayaran: ${paymentMethod}\n`;
+
+    // Display order summary in alert or modal
+    alert(orderSummary); // You can replace this with a modal display
+
+    // Clear the cart
+    cart = [];
+    localStorage.removeItem('sweetBakeryCart');
+    updateCartDisplay();
+    updateCartCount();
+    
+    // Close the checkout modal
+    closeCheckoutModal();
+    
+    // Notify user
+    showToast('Pesanan berhasil dikirim! Terima kasih telah berbelanja.');
+});
+
+// Function to update the order summary before showing modal
+function updateOrderSummary() {
+    const orderSummary = document.getElementById('order-summary');
+    let summaryHTML = '<h4>Ringkasan Pesanan:</h4>';
+    let total = 0;
+
+    cart.forEach(item => {
+        const itemTotal = item.price * item.quantity;
+        total += itemTotal;
+        summaryHTML += `
+            <div class="order-item">
+                <span>${item.name} (${item.quantity}x)</span>
+                <span>Rp ${itemTotal.toLocaleString('id-ID')}</span>
+            </div>
+        `;
+    });
+
+    summaryHTML += `
+        <div class="order-item order-total">
+            <span>Total</span>
+            <span>Rp ${total.toLocaleString('id-ID')}</span>
+        </div>
+    `;
+
+    orderSummary.innerHTML = summaryHTML; // Set the order summary in the modal
+}
+
+// Function to close the checkout modal
+function closeCheckoutModal() {
+    document.getElementById('checkout-modal').classList.remove('active');
+}
+});
+
+        // Shopping Cart System
+        let cart = JSON.parse(localStorage.getItem('sweetBakeryCart')) || [];
+        
+        // Reviews System
+        let reviews = JSON.parse(localStorage.getItem('sweetBakeryReviews')) || [];
+        let selectedRating = 0;
+
+        // Initialize app on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartDisplay();
+            updateCartCount();
+            setMinDate();
+            initReviewsSystem();
+            displayReviews();
+            updateReviewsStats();
+        });
+
+        // Set minimum date to today
+        function setMinDate() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('delivery-date').setAttribute('min', today);
+        }
+
+        // Reviews System Functions
+        function initReviewsSystem() {
+            const starRatingInput = document.getElementById('star-rating-input');
+            const stars = starRatingInput.querySelectorAll('.star');
+
+            stars.forEach(star => {
+                star.addEventListener('click', function() {
+                    selectedRating = parseInt(this.dataset.rating);
+                    updateStarRating(stars, selectedRating);
+                });
+
+                star.addEventListener('mouseover', function() {
+                    const hoverRating = parseInt(this.dataset.rating);
+                    updateStarRating(stars, hoverRating);
+                });
+            });
+
+            starRatingInput.addEventListener('mouseleave', function() {
+                updateStarRating(stars, selectedRating);
+            });
+        }
+
+        function updateStarRating(stars, rating) {
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
+        }
+
+        function addReview(name, rating, text) {
+            const review = {
+                id: Date.now(),
+                name: name,
+                rating: parseInt(rating),
+                text: text,
+                date: new Date().toLocaleDateString('id-ID', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                })
+            };
+
+            reviews.unshift(review);
+            localStorage.setItem('sweetBakeryReviews', JSON.stringify(reviews));
+            displayReviews();
+            updateReviewsStats();
+            showToast('Terima kasih! Ulasan Anda berhasil ditambahkan.');
+        }
+
+        function displayReviews() {
+            const reviewsContainer = document.getElementById('reviews-container');
+            
+            if (reviews.length === 0) {
+                reviewsContainer.innerHTML = `
+                    <div class="no-reviews">
+                        <i class="fas fa-comments"></i>
+                        <p>Belum ada ulasan. Jadilah yang pertama memberikan ulasan!</p>
+                    </div>
+                `;
+            } else {
+                let reviewsHTML = '';
+                reviews.forEach(review => {
+                    const initials = review.name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+                    const starsHTML = generateStars(review.rating);
+                    
+                    reviewsHTML += `
+                        <div class="review-item">
+                            <div class="review-header">
+                                <div class="reviewer-info">
+                                    <div class="reviewer-avatar">${initials}</div>
+                                    <div>
+                                        <div class="reviewer-name">${review.name}</div>
+                                        <div class="review-date">${review.date}</div>
+                                    </div>
+                                </div>
+                                <div class="star-rating">
+                                    ${starsHTML}
+                                </div>
+                            </div>
+                            <div class="review-text">${review.text}</div>
+                        </div>
+                    `;
+                });
+                reviewsContainer.innerHTML = reviewsHTML;
+            }
+        }
+
+        function generateStars(rating) {
+            let starsHTML = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= rating) {
+                    starsHTML += '<span class="star filled">⭐</span>';
+                } else {
+                    starsHTML += '<span class="star">⭐</span>';
+                }
+            }
+            return starsHTML;
+        }
+
+        function updateReviewsStats() {
+            const reviewsStats = document.getElementById('reviews-stats');
+            const avgRatingEl = document.getElementById('avg-rating');
+            const avgStarDisplay = document.getElementById('avg-star-display');
+            const totalReviewsDisplay = document.getElementById('total-reviews-display');
+
+            if (reviews.length > 0) {
+                const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
+                const avgRating = (totalRating / reviews.length).toFixed(1);
+                
+                avgRatingEl.textContent = avgRating;
+                avgStarDisplay.innerHTML = generateStars(Math.round(avgRating));
+                totalReviewsDisplay.textContent = `Berdasarkan ${reviews.length} ulasan`;
+                reviewsStats.style.display = 'block';
+            } else {
+                reviewsStats.style.display = 'none';
+            }
+        }
+
+        // Handle review form submission
+        document.getElementById('review-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const reviewerName = formData.get('reviewer-name');
+            const reviewText = formData.get('review-text');
+            
+            if (selectedRating === 0) {
+                showToast('Harap berikan rating terlebih dahulu!');
+                return;
+            }
+
+            if (reviewerName.trim() === '' || reviewText.trim() === '') {
+                showToast('Harap lengkapi semua field yang diperlukan!');
+                return;
+            }
+
+            addReview(reviewerName, selectedRating, reviewText);
+            
+            // Reset form
+            this.reset();
+            selectedRating = 0;
+            const stars = document.querySelectorAll('#star-rating-input .star');
+            updateStarRating(stars, 0);
+        });
+
+        // Shopping Cart Functions
+        function addToCart(name, price) {
+            const existingItem = cart.find(item => item.name === name);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    name: name,
+                    price: price,
+                    quantity: 1
+                });
+            }
+            
+            localStorage.setItem('sweetBakeryCart', JSON.stringify(cart));
+            updateCartDisplay();
+            updateCartCount();
+            
+            showToast('Produk berhasil ditambahkan ke keranjang!');
+        }
+
+        function removeFromCart(name) {
+            cart = cart.filter(item => item.name !== name);
+            localStorage.setItem('sweetBakeryCart', JSON.stringify(cart));
+            updateCartDisplay();
+            updateCartCount();
+            showToast('Produk berhasil dihapus dari keranjang!');
+        }
+
+        function updateQuantity(name, change) {
+            const item = cart.find(item => item.name === name);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity <= 0) {
+                    removeFromCart(name);
+                    return;
+                }
+                localStorage.setItem('sweetBakeryCart', JSON.stringify(cart));
+                updateCartDisplay();
+                updateCartCount();
+            }
+        }
+
+        function updateCartDisplay() {
+            const cartItems = document.getElementById('cart-items');
+            const cartFooter = document.getElementById('cart-footer');
+            
+            if (cart.length === 0) {
+                cartItems.innerHTML = `
+                    <div class="empty-cart">
+                        <i class="fas fa-shopping-cart"></i>
+                        <p>Keranjang belanja kosong</p>
+                    </div>
+                `;
+                cartFooter.style.display = 'none';
+            } else {
+                let cartHTML = '';
+                let total = 0;
+                
+                cart.forEach(item => {
+                    const itemTotal = item.price * item.quantity;
+                    total += itemTotal;
+                    
+                    cartHTML += `
+                        <div class="cart-item">
+                            <div class="cart-item-info">
+                                <h4*_
+                                <h4>${item.name}</h4>
+                                <p>Rp ${item.price.toLocaleString('id-ID')}</p>
+                            </div>
+                            <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+                                <div class="quantity-controls">
+                                    <button class="quantity-btn" onclick="updateQuantity('${item.name}', -1)">-</button>
+                                    <span style="margin: 0 0.5rem; font-weight: bold;">${item.quantity}</span>
+                                    <button class="quantity-btn" onclick="updateQuantity('${item.name}', 1)">+</button>
+                                </div>
+                                <button class="remove-item" onclick="removeFromCart('${item.name}')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                cartItems.innerHTML = cartHTML;
+                document.getElementById('cart-total').textContent = `Total: Rp ${total.toLocaleString('id-ID')}`;
+                cartFooter.style.display = 'block';
+            }
+        }
+
+        function updateCartCount() {
+            const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cart-count').textContent = count;
+        }
+
+        function toggleCart() {
+            const cartSidebar = document.getElementById('cart-sidebar');
+            cartSidebar.classList.toggle('active');
+        }
+
+        function showCheckoutModal() {
+            if (cart.length === 0) {
+                showToast('Keranjang belanja kosong!');
+                return;
+            }
+            
+            const modal = document.getElementById('checkout-modal');
+            const orderSummary = document.getElementById('order-summary');
+            
+            let summaryHTML = '<h4>Ringkasan Pesanan:</h4>';
+            let total = 0;
+            
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                summaryHTML += `
+                    <div class="order-item">
+                        <span>${item.name} (${item.quantity}x)</span>
+                        <span>Rp ${itemTotal.toLocaleString('id-ID')}</span>
+                    </div>
+                `;
+            });
+            
+            summaryHTML += `
+                <div class="order-item order-total">
+                    <span>Total</span>
+                    <span>Rp ${total.toLocaleString('id-ID')}</span>
+                </div>
+            `;
+            
+            orderSummary.innerHTML = summaryHTML;
+            modal.classList.add('active');
+            toggleCart();
+        }
+
+        function closeCheckoutModal() {
+            document.getElementById('checkout-modal').classList.remove('active');
+        }
+
+        // Handle checkout form submission
+        document.getElementById('checkout-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const customerName = formData.get('customer-name');
+            const customerPhone = formData.get('customer-phone');
+            const customerAddress = formData.get('customer-address');
+            const deliveryDate = formData.get('delivery-date');
+            const deliveryTime = formData.get('delivery-time');
+            const notes = formData.get('notes');
+            
+            // Format WhatsApp message
+            let message = `🧁 *PESANAN BARU - SWEET BAKERY* 🧁\n\n`;
+            message += `👤 *Nama:* ${customerName}\n`;
+            message += `📱 *WhatsApp:* ${customerPhone}\n`;
+            message += `📍 *Alamat:* ${customerAddress}\n`;
+            message += `📅 *Tanggal Pengiriman:* ${formatDate(deliveryDate)}\n`;
+            message += `⏰ *Waktu Pengiriman:* ${deliveryTime}\n\n`;
+            
+            message += `🛒 *DETAIL PESANAN:*\n`;
+            message += `─────────────────\n`;
+            
+            let total = 0;
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                message += `• ${item.name}\n`;
+                message += `  Qty: ${item.quantity}x | Harga: Rp ${item.price.toLocaleString('id-ID')}\n`;
+                message += `  Subtotal: Rp ${itemTotal.toLocaleString('id-ID')}\n\n`;
+            });
+            
+            message += `─────────────────\n`;
+            message += `💰 *TOTAL: Rp ${total.toLocaleString('id-ID')}*\n\n`;
+            
+            if (notes) {
+                message += `📝 *Catatan:* ${notes}\n\n`;
+            }
+            
+            message += `💳 *METODE PEMBAYARAN:*\n`;
+            message += `• BCA: 1234567890\n`;
+            message += `• Mandiri: 0987654321\n`;
+            message += `a/n Sweet Bakery\n\n`;
+            message += `_Mohon kirim bukti transfer setelah melakukan pembayaran. Terima kasih! 🙏_`;
+            
+            // Send to WhatsApp
+            const whatsappUrl = `https://wa.me/6282228810026?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+            
+            // Clear cart and close modal
+            cart = [];
+            localStorage.removeItem('sweetBakeryCart');
+            updateCartDisplay();
+            updateCartCount();
+            closeCheckoutModal();
+            
+            showToast('Pesanan berhasil dikirim! Silakan lanjutkan pembayaran via WhatsApp.');
+        });
+
+        // Format date to Indonesian format
+        function formatDate(dateString) {
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            };
+            return new Date(dateString).toLocaleDateString('id-ID', options);
+        }
+
+        // Show toast notification
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => toast.classList.add('show'), 100);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => document.body.removeChild(toast), 300);
+            }, 3000);
+        }
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const navLinks = document.querySelector('.nav-links');
+            navLinks.classList.toggle('active');
+        }
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+                // Close mobile menu after click
+                document.querySelector('.nav-links').classList.remove('active');
+            });
+        });
+
+        // Contact form submission
+        document.querySelector('#contact form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const name = formData.get('name');
+            const email = formData.get('email');
+            const message = formData.get('message');
+            
+            const whatsappMessage = `Halo Sweet Bakery!\n\nNama: ${name}\nEmail: ${email}\nPesan: ${message}`;
+            const whatsappUrl = `https://wa.me/6282228810026?text=${encodeURIComponent(whatsappMessage)}`;
+            
+            window.open(whatsappUrl, '_blank');
+            this.reset();
+            showToast('Pesan berhasil dikirim via WhatsApp!');
+        });
+
+        // Add scroll effect to header
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(255, 107, 107, 0.95)';
+                header.style.backdropFilter = 'blur(10px)';
+            } else {
+                header.style.background = 'linear-gradient(135deg, #ff6b6b, #feca57)';
+                header.style.backdropFilter = 'none';
+            }
+        });
+
+        // Close cart when clicking outside
+        document.addEventListener('click', function(e) {
+            const cartSidebar = document.getElementById('cart-sidebar');
+            const cartIcon = document.querySelector('.cart-icon');
+            
+            if (!cartSidebar.contains(e.target) && !cartIcon.contains(e.target)) {
+                cartSidebar.classList.remove('active');
+            }
+        });
+
+        // Close modal when clicking outside
+        document.addEventListener('click', function(e) {
+            const modal = document.getElementById('checkout-modal');
+            
+            if (e.target === modal) {
+                closeCheckoutModal();
+            }
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(e) {
+            const nav = document.querySelector('nav');
+            const navLinks = document.querySelector('.nav-links');
+            
+            if (!nav.contains(e.target)) {
+                navLinks.classList.remove('active');
+            }
+        });
+
+        // Handle escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                document.getElementById('cart-sidebar').classList.remove('active');
+                closeCheckoutModal();
+                document.querySelector('.nav-links').classList.remove('active');
+            }
+        });
+
+        // Phone number formatting
+        document.getElementById('customer-phone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/[^\d]/g, '');
+            if (value.startsWith('0')) {
+                value = '62' + value.substring(1);
+            }
+            e.target.value = value;
+        });
+
+        // Prevent past date selection
+        document.getElementById('delivery-date').addEventListener('change', function(e) {
+            const selectedDate = new Date(e.target.value);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            if (selectedDate < today) {
+                showToast('Tidak dapat memilih tanggal yang sudah lewat!');
+                e.target.value = '';
+            }
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements for animation
+        document.querySelectorAll('.menu-item, .review-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+
+        // Preload default reviews for demonstration
+        if (reviews.length === 0) {
+            const defaultReviews = [
+                {
+                    id: 1,
+                    name: 'Sarah Putri',
+                    rating: 5,
+                    text: 'Kue tartnya sangat lezat! Cokelatnya rich dan tidak terlalu manis. Pelayanannya juga ramah. Pasti akan order lagi!',
+                    date: '15 Januari 2026'
+                },
+                {
+                    id: 2,
+                    name: 'Ahmad Rahman',
+                    rating: 5,
+                    text: 'Red velvet cakenya juara! Teksturnya lembut dan cream cheesenya pas banget. Recommended untuk acara spesial.',
+                    date: '12 Januari 2026'
+                },
+                {
+                    id: 3,
+                    name: 'Maya Sari',
+                    rating: 4,
+                    text: 'Cheesecakenya enak, tapi agak manis menurutku. Overall tetap worth it dan packagingnya bagus.',
+                    date: '10 Januari 2026'
+                },
+                {
+                    id: 4,
+                    name: 'Budi Santoso',
+                    rating: 5,
+                    text: 'Tiramisu terenak yang pernah saya coba! Rasa kopinya balance dan tidak terlalu strong. Perfect!',
+                    date: '8 Januari 2026'
+                }
+            ];
+            
+            reviews = defaultReviews;
+            localStorage.setItem('sweetBakeryReviews', JSON.stringify(reviews));
+            displayReviews();
+            updateReviewsStats();
+        }
+
+        // PWA Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js').then(function(registration) {
+                    console.log('ServiceWorker registration successful');
+                }, function(err) {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+            });
+        }
+
+        // Add to home screen prompt
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            // Show install banner after 3 seconds
+            setTimeout(() => {
+                if (deferredPrompt) {
+                    showInstallPrompt();
+                }
+            }, 3000);
+        });
+
+        function showInstallPrompt() {
+            const banner = document.createElement('div');
+            banner.innerHTML = `
+                <div style="position: fixed; bottom: 80px; left: 20px; right: 20px; background: linear-gradient(135deg, #ff6b6b, #feca57); color: white; padding: 1rem; border-radius: 15px; z-index: 1000; box-shadow: 0 4px 20px rgba(0,0,0,0.2);">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <strong>Install Sweet Bakery</strong>
+                            <p style="margin: 0; font-size: 0.9rem; opacity: 0.9;">Akses lebih cepat dan mudah!</p>
+                        </div>
+                        <div>
+                            <button onclick="installApp()" style="background: white; color: #ff6b6b; border: none; padding: 0.5rem 1rem; border-radius: 20px; margin-right: 0.5rem; cursor: pointer; font-weight: 600;">Install</button>
+                            <button onclick="closeBanner()" style="background: none; color: white; border: none; font-size: 1.5rem; cursor: pointer;">×</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(banner);
+        }
+
+        function installApp() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        showToast('Terima kasih! Sweet Bakery berhasil diinstall.');
+                    }
+                    deferredPrompt = null;
+                    closeBanner();
+                });
+            }
+        }
+
+        function closeBanner() {
+            const banner = document.querySelector('[style*="position: fixed; bottom: 80px"]');
+            if (banner) {
+                banner.remove();
+            }
+        }
+
+        // Performance optimization - Lazy loading images
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    if (img.dataset.src) {
+                        img.style.backgroundImage = `url(${img.dataset.src})`;
+                        observer.unobserve(img);
+                    }
+                }
+            });
+        });
+
+        // Apply lazy loading to menu items
+        document.querySelectorAll('.menu-item-image').forEach(img => {
+            if (img.style.backgroundImage) {
+                const url = img.style.backgroundImage.slice(5, -2);
+                img.dataset.src = url;
+                img.style.backgroundImage = 'none';
+                imageObserver.observe(img);
+            }
+        });
+
+        // Error handling for failed operations
+        window.addEventListener('error', function(e) {
+            console.error('Error occurred:', e.error);
+            showToast('Terjadi kesalahan. Silakan refresh halaman.');
+        });
+
+        // Network status monitoring
+        window.addEventListener('online', function() {
+            showToast('Koneksi internet tersambung kembali!');
+        });
+
+        window.addEventListener('offline', function() {
+            showToast('Koneksi internet terputus. Beberapa fitur mungkin tidak tersedia.');
+        });
+// Order Tracking System
+let orders = JSON.parse(localStorage.getItem('sweetBakeryOrders')) || [];
+
+// Order status definitions
+const orderStatuses = {
+    'pending': { label: 'Menunggu Konfirmasi', progress: 10, icon: 'fas fa-clock', color: '#ffa726', estimate: 'Menunggu konfirmasi pembayaran' },
+    'confirmed': { label: 'Pesanan Dikonfirmasi', progress: 20, icon: 'fas fa-check', color: '#42a5f5', estimate: '30-45 menit lagi' },
+    'preparing': { label: 'Sedang Disiapkan', progress: 35, icon: 'fas fa-cog', color: '#ab47bc', estimate: '25-30 menit lagi' },
+    'baking': { label: 'Sedang Dipanggang', progress: 55, icon: 'fas fa-fire', color: '#ff7043', estimate: '20-25 menit lagi' },
+    'ready': { label: 'Siap Dikirim', progress: 75, icon: 'fas fa-check-circle', color: '#26a69a', estimate: '10-15 menit lagi' },
+    'shipping': { label: 'Dalam Pengiriman', progress: 90, icon: 'fas fa-shipping-fast', color: '#66bb6a', estimate: '15-20 menit lagi' },
+    'delivered': { label: 'Terkirim', progress: 100, icon: 'fas fa-check-double', color: '#4caf50', estimate: 'Pesanan telah sampai' }
+};
+
+// Initialize order tracking system
+function initOrderTracking() {
+    displayOrders();
+    
+    // Auto-update order status setiap 15 detik untuk simulasi real-time
+    setInterval(() => {
+        updateOrderStatuses();
+    }, 15000);
+    
+    // Check for orders yang perlu diupdate
+    checkPendingOrders();
+}
+
+function generateOrderId() {
+    return 'SB' + Date.now().toString().slice(-6);
+}
+
+function createOrder(customerData, cartItems, total) {
+    const orderId = generateOrderId();
+    const order = {
+        id: orderId,
+        customerName: customerData.name,
+        customerPhone: customerData.phone,
+        customerAddress: customerData.address,
+        deliveryDate: customerData.deliveryDate,
+        deliveryTime: customerData.deliveryTime,
+        notes: customerData.notes,
+        items: cartItems.map(item => ({...item})),
+        total: total,
+        status: 'pending',
+        createdAt: new Date().toISOString(),
+        timeline: [{
+            status: 'pending',
+            timestamp: new Date().toISOString(),
+            message: 'Pesanan berhasil dibuat dan menunggu konfirmasi'
+        }],
+        courierInfo: null
+    };
+
+    orders.push(order);
+    localStorage.setItem('sweetBakeryOrders', JSON.stringify(orders));
+    
+    // Auto-progress order status untuk simulasi realistic timing
+    setTimeout(() => progressOrderStatus(orderId), 8000); // 8 detik -> confirmed
+    
+    displayOrders();
+    return orderId;
+}
+
+function progressOrderStatus(orderId) {
+    const order = orders.find(o => o.id === orderId);
+    if (!order || order.status === 'delivered') return;
+
+    const statusFlow = ['pending', 'confirmed', 'preparing', 'baking', 'ready', 'shipping', 'delivered'];
+    const currentIndex = statusFlow.indexOf(order.status);
+    
+    if (currentIndex < statusFlow.length - 1) {
+        const nextStatus = statusFlow[currentIndex + 1];
+        updateOrderStatus(orderId, nextStatus);
+        
+        // Schedule next status update dengan timing realistis
+        const delays = {
+            'confirmed': 12000,  // 12 detik -> preparing
+            'preparing': 18000,  // 18 detik -> baking  
+            'baking': 25000,     // 25 detik -> ready
+            'ready': 10000,      // 10 detik -> shipping
+            'shipping': 30000,   // 30 detik -> delivered
+        };
+        
+        if (delays[nextStatus]) {
+            setTimeout(() => progressOrderStatus(orderId), delays[nextStatus]);
+        }
+
+        // Add courier info when shipping
+        if (nextStatus === 'shipping') {
+            const couriers = [
+                { name: 'Ahmad Kurniawan', phone: '082112345678', vehicle: 'B 1234 ABC' },
+                { name: 'Budi Santoso', phone: '081298765432', vehicle: 'B 5678 DEF' },
+                { name: 'Citra Dewi', phone: '085156781234', vehicle: 'B 9012 GHI' },
+                { name: 'Denny Pratama', phone: '087823456789', vehicle: 'B 3456 JKL' }
+            ];
+            
+            order.courierInfo = couriers[Math.floor(Math.random() * couriers.length)];
+            localStorage.setItem('sweetBakeryOrders', JSON.stringify(orders));
+        }
+    }
+}
+
+function updateOrderStatus(orderId, newStatus) {
+    const order = orders.find(o => o.id === orderId);
+    if (!order) return;
+
+    order.status = newStatus;
+    order.timeline.push({
+        status: newStatus,
+        timestamp: new Date().toISOString(),
+        message: getStatusMessage(newStatus)
+    });
+
+    localStorage.setItem('sweetBakeryOrders', JSON.stringify(orders));
+    displayOrders();
+    
+    // Show notification dengan suara (jika didukung)
+    showStatusNotification(`Pesanan ${orderId}: ${orderStatuses[newStatus].label}`);
+    
+    // Browser notification jika permission diberikan
+    if ('Notification' in window && Notification.permission === 'granted') {
+        new Notification(`Sweet Bakery - Update Pesanan`, {
+            body: `Pesanan #${orderId}: ${orderStatuses[newStatus].label}`,
+            icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="80">🧁</text></svg>',
+            badge: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="80">🧁</text></svg>'
+        });
+    }
+}
+
+function getStatusMessage(status) {
+    const messages = {
+        'pending': 'Pesanan menunggu konfirmasi pembayaran',
+        'confirmed': 'Pembayaran dikonfirmasi, pesanan mulai diproses',
+        'preparing': 'Tim dapur sedang menyiapkan bahan-bahan kue',
+        'baking': 'Kue sedang dipanggang dengan penuh cinta ❤️',
+        'ready': 'Pesanan siap dan menunggu kurir untuk dikirim',
+        'shipping': 'Kurir sedang dalam perjalanan menuju alamat Anda',
+        'delivered': 'Pesanan telah sampai dengan selamat 🎉'
+    };
+    return messages[status] || 'Status pesanan diperbarui';
+}
+
+function updateOrderStatuses() {
+    const now = new Date().getTime();
+    
+    orders.forEach(order => {
+        if (order.status !== 'delivered') {
+            const orderTime = new Date(order.createdAt).getTime();
+            const timeDiff = now - orderTime;
+            
+            // Auto-progress berdasarkan waktu yang realistis
+            if (timeDiff > 120000 && order.status === 'pending') { // 2 menit
+                progressOrderStatus(order.id);
+            }
+        }
+    });
+}
+
+function checkPendingOrders() {
+    orders.forEach(order => {
+        if (order.status !== 'delivered') {
+            const lastUpdate = new Date(order.timeline[order.timeline.length - 1].timestamp).getTime();
+            const now = new Date().getTime();
+            const timeSinceUpdate = now - lastUpdate;
+            
+            // Jika tidak ada update dalam 30 detik, lanjutkan progress
+            if (timeSinceUpdate > 30000) {
+                progressOrderStatus(order.id);
+            }
+        }
+    });
+}
+
+function displayOrders() {
+    const ordersList = document.getElementById('orders-list');
+    
+    if (orders.length === 0) {
+        ordersList.innerHTML = `
+            <div class="no-orders">
+                <i class="fas fa-receipt"></i>
+                <p>Belum ada pesanan. Silakan berbelanja terlebih dahulu!</p>
+            </div>
+        `;
+        return;
+    }
+
+    let ordersHTML = '';
+    
+    // Sort orders by creation date (newest first)
+    const sortedOrders = [...orders].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    
+    sortedOrders.slice(0, 10).forEach(order => { // Show max 10 recent orders
+        const statusInfo = orderStatuses[order.status];
+        const orderDate = new Date(order.createdAt).toLocaleDateString('id-ID', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+        
+        const itemsText = order.items.map(item => `${item.name} (${item.quantity}x)`).join(', ');
+        const itemsDisplay = itemsText.length > 50 ? itemsText.substring(0, 50) + '...' : itemsText;
+        
+        ordersHTML += `
+            <div class="order-card ${order.status}" onclick="showOrderTracking('${order.id}')">
+                <div class="order-header">
+                    <div class="order-id">#${order.id}</div>
+                    <div class="order-status status-${order.status}">
+                        <i class="${statusInfo.icon}"></i> ${statusInfo.label}
+                    </div>
+                </div>
+                <div class="order-items" title="${itemsText}">${itemsDisplay}</div>
+                <div class="order-date">
+                    <i class="fas fa-calendar"></i> ${orderDate} • 
+                    <i class="fas fa-money-bill"></i> Rp ${order.total.toLocaleString('id-ID')}
+                </div>
+            </div>
+        `;
+    });
+    
+    ordersList.innerHTML = ordersHTML;
+}
+
+
+
+        console.log('🧁 Sweet Bakery - Website Loaded Successfully!');
+    </script>
+	<!-- Chatbot Widget -->
+<div class="chatbot-widget">
+    <button class="chatbot-toggle" id="chatbot-toggle" onclick="toggleChatbot()">
+        <i class="fas fa-comments" id="chatbot-icon"></i>
+        <div class="chatbot-notification" id="chatbot-notification" style="display: none;">1</div>
+    </button>
+    
+    <div class="chatbot-window" id="chatbot-window">
+        <div class="chatbot-header">
+            <div class="chatbot-title">
+                <div class="chatbot-status"></div>
+                <div>
+                    <div style="font-size: 0.9rem;">Sweet Bakery Assistant</div>
+                    <div style="font-size: 0.75rem; opacity: 0.8;">Online - Siap Membantu</div>
+                </div>
+            </div>
+            <button class="chatbot-close" onclick="toggleChatbot()">×</button>
+        </div>
+        
+        <div class="chatbot-messages" id="chatbot-messages">
+            <!-- Messages will be inserted here by JavaScript -->
+        </div>
+        
+        <div class="chatbot-input">
+            <textarea 
+                class="chatbot-input-field" 
+                id="chatbot-input" 
+                placeholder="Ketik pesan Anda..."
+                rows="1"
+                onkeypress="handleChatEnter(event)"
+                oninput="autoResizeTextarea(this)"
+            ></textarea>
+            <button class="chatbot-send" id="chatbot-send" onclick="sendMessage()">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+</div>
+    <script>
+        // Chatbot functionality
+        const chatbotMessages = document.getElementById('chatbot-messages');
+        const chatbotInput = document.getElementById('chatbot-input');
+        const chatbotWindow = document.getElementById('chatbot-window');
+        const chatbotToggle = document.getElementById('chatbot-toggle');
+        const chatbotNotification = document.getElementById('chatbot-notification');
+        
+        let chatHistory = [];
+
+        // Toggle chatbot visibility
+        function toggleChatbot() {
+            chatbotWindow.classList.toggle('active');
+            chatbotToggle.classList.toggle('active');
+            chatbotNotification.style.display = 'none'; // Hide notification when opened
+        }
+
+        // Send message from the user
+        function sendMessage() {
+            const messageText = chatbotInput.value.trim();
+            if (messageText) {
+                addMessageToChat('user', messageText);
+                chatbotInput.value = '';
+                getResponse(messageText);
+            }
+        }
+
+        // Handle Enter key press in the chatbot input field
+        function handleChatEnter(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        // Automatically resize the textarea
+        function autoResizeTextarea(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = textarea.scrollHeight + 'px';
+        }
+
+        // Add a message to the chat
+        function addMessageToChat(sender, text) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('chat-message', sender);
+            messageElement.innerHTML = `
+                <div class="chat-avatar ${sender}">${sender === 'user' ? '👤' : '🤖'}</div>
+                <div class="chat-bubble ${sender}">
+                    ${text}
+                </div>
+            `;
+            chatbotMessages.appendChild(messageElement);
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight; // Scroll to bottom
+            chatHistory.push({ sender, text });
+        }
+
+        // Function to simulate a chatbot response
+        function getResponse(userMessage) {
+            // Basic responses for demonstration
+            const responses = {
+                "halo": "Halo! Ada yang bisa saya bantu?",
+                "menu": "Kami memiliki berbagai kue seperti Tiramisu, Red Velvet, dan banyak lagi!",
+                "terima kasih": "Sama-sama! Jika ada pertanyaan lain, silakan tanyakan.",
+                "default": "Maaf, saya tidak mengerti. Bisa ulangi?"
+            };
+
+            // Simulate a delay for response
+            setTimeout(() => {
+                const lowerMessage = userMessage.toLowerCase();
+                let botResponse = responses[lowerMessage] || responses["default"];
+                addMessageToChat('bot', botResponse);
+            }, 1000); // 1 second delay for response
+        }
+    </script>
+
+</body>
+</html>
